@@ -1,6 +1,6 @@
-# Next.js 14 Clean Architecture Feature Implementation Guide
+# Next.js 15 Clean Architecture Feature Implementation Guide
 
-This guide demonstrates how to implement new features in an existing Next.js 14 application using clean architecture principles. We'll use a Todo feature as an example.
+This guide demonstrates how to implement new features in an existing Next.js 15 application using clean architecture principles and React 19 features.
 
 ## Existing Project Structure
 
@@ -34,28 +34,29 @@ When adding a new feature to the application, follow these steps:
    - Repository Interface
    - Repository Implementation
    - Service
+   - Actions (Server Actions)
    - Components
    - API Routes (if needed)
    - Page Component (if needed)
 
-Let's walk through these steps using the Todo feature as an example.
-
 ### 1. Feature Directory Structure
 
-Create the following structure for the Todo feature:
+Create the following structure for your feature:
 
 ```
 src/
   features/
-    todos/
+    [feature-name]/
+      actions/
+        featureActions.ts
       components/
-        TodoList.tsx
+        FeatureComponent.tsx
         ErrorBoundary.tsx
       services/
-        todoService.ts
+        featureService.ts
       repositories/
-        todoRepository.ts
-        mockTodoRepository.ts
+        featureRepository.ts
+        mockFeatureRepository.ts
       schemas.ts
       types.ts
       utils.ts
@@ -64,329 +65,265 @@ src/
 
 ### 2. Implement Feature Components
 
-#### Schemas (`src/features/todos/schemas.ts`)
+#### Schemas (`src/features/[feature-name]/schemas.ts`)
 
 ```typescript
 import { z } from 'zod';
 
-export const todoSchema = z.object({
+// Define your Zod schemas for data validation and type inference
+export const featureSchema = z.object({
   id: z.string(),
-  title: z.string().min(1, "Title cannot be empty").max(100, "Title is too long"),
-  completed: z.boolean(),
+  // Add your feature-specific fields
 });
 
-export const todoListSchema = z.array(todoSchema);
+export const featureListSchema = z.array(featureSchema);
 
-export const createTodoSchema = todoSchema.pick({ title: true });
+export const createFeatureSchema = featureSchema.pick({
+  // Specify fields needed for creation
+});
 ```
 
-#### Types (`src/features/todos/types.ts`)
+#### Types (`src/features/[feature-name]/types.ts`)
 
 ```typescript
 import { z } from 'zod';
-import { todoSchema, todoListSchema, createTodoSchema } from './schemas';
+import { featureSchema, featureListSchema, createFeatureSchema } from './schemas';
 
-export type Todo = z.infer<typeof todoSchema>;
-export type TodoList = z.infer<typeof todoListSchema>;
-export type CreateTodoInput = z.infer<typeof createTodoSchema>;
+export type Feature = z.infer<typeof featureSchema>;
+export type FeatureList = z.infer<typeof featureListSchema>;
+export type CreateFeatureInput = z.infer<typeof createFeatureSchema>;
 
-export interface TodoError {
+export interface FeatureError {
   message: string;
   code?: string;
 }
 ```
 
-#### Repository Interface (`src/features/todos/repositories/todoRepository.ts`)
+#### Repository Interface (`src/features/[feature-name]/repositories/featureRepository.ts`)
 
 ```typescript
-import { Todo, TodoList, CreateTodoInput } from '../types';
+import { Feature, FeatureList, CreateFeatureInput } from '../types';
 
-export interface TodoRepository {
-  getTodos(): Promise<TodoList>;
-  getTodoById(id: string): Promise<Todo>;
-  createTodo(todo: CreateTodoInput): Promise<Todo>;
-  updateTodo(id: string, todo: Partial<Todo>): Promise<Todo>;
-  deleteTodo(id: string): Promise<boolean>;
+export interface FeatureRepository {
+  getAll(): Promise<FeatureList>;
+  getById(id: string): Promise<Feature>;
+  create(input: CreateFeatureInput): Promise<Feature>;
+  update(id: string, data: Partial<Feature>): Promise<Feature>;
+  delete(id: string): Promise<boolean>;
 }
 ```
 
-#### Repository Implementation (`src/features/todos/repositories/mockTodoRepository.ts`)
+#### Repository Implementation (`src/features/[feature-name]/repositories/mockFeatureRepository.ts`)
 
 ```typescript
-import { TodoRepository } from './todoRepository';
-import { Todo, TodoList, CreateTodoInput } from '../types';
-import { todoSchema, todoListSchema } from '../schemas';
-import { AppError } from '@/core/errors/AppError';
+import { FeatureRepository } from './featureRepository';
+import { Feature, FeatureList, CreateFeatureInput } from '../types';
+import { featureSchema, featureListSchema } from '../schemas';
+import { AppError } from 'core/errors/AppError';
 
-export class MockTodoRepository implements TodoRepository {
-  private todos: TodoList = [
-    { id: '1', title: 'Learn Next.js', completed: false },
-    { id: '2', title: 'Build a todo app', completed: false },
-  ];
+export class MockFeatureRepository implements FeatureRepository {
+  private items: FeatureList = [];
 
-  async getTodos(): Promise<TodoList> {
-    return todoListSchema.parse(this.todos);
+  async getAll(): Promise<FeatureList> {
+    return featureListSchema.parse(this.items);
   }
 
-  async getTodoById(id: string): Promise<Todo> {
-    const todo = this.todos.find(t => t.id === id);
-    if (!todo) {
-      throw new AppError('Todo not found', 'NOT_FOUND');
+  async getById(id: string): Promise<Feature> {
+    const item = this.items.find(i => i.id === id);
+    if (!item) {
+      throw new AppError('Item not found', 'NOT_FOUND');
     }
-    return todoSchema.parse(todo);
+    return featureSchema.parse(item);
   }
 
-  async createTodo(todo: CreateTodoInput): Promise<Todo> {
-    const newTodo = { ...todo, id: Date.now().toString(), completed: false };
-    this.todos.push(newTodo);
-    return todoSchema.parse(newTodo);
+  async create(input: CreateFeatureInput): Promise<Feature> {
+    const newItem = { ...input, id: Date.now().toString() };
+    this.items.push(newItem);
+    return featureSchema.parse(newItem);
   }
 
-  async updateTodo(id: string, updatedFields: Partial<Todo>): Promise<Todo> {
-    const index = this.todos.findIndex(t => t.id === id);
+  async update(id: string, data: Partial<Feature>): Promise<Feature> {
+    const index = this.items.findIndex(i => i.id === id);
     if (index === -1) {
-      throw new AppError('Todo not found', 'NOT_FOUND');
+      throw new AppError('Item not found', 'NOT_FOUND');
     }
-    this.todos[index] = { ...this.todos[index], ...updatedFields };
-    return todoSchema.parse(this.todos[index]);
+    this.items[index] = { ...this.items[index], ...data };
+    return featureSchema.parse(this.items[index]);
   }
 
-  async deleteTodo(id: string): Promise<boolean> {
-    const initialLength = this.todos.length;
-    this.todos = this.todos.filter(t => t.id !== id);
-    return this.todos.length < initialLength;
+  async delete(id: string): Promise<boolean> {
+    const initialLength = this.items.length;
+    this.items = this.items.filter(i => i.id !== id);
+    return this.items.length < initialLength;
   }
 }
 ```
 
-#### Service (`src/features/todos/services/todoService.ts`)
+#### Service (`src/features/[feature-name]/services/featureService.ts`)
 
 ```typescript
-import { TodoRepository } from '../repositories/todoRepository';
-import { Todo, TodoList, CreateTodoInput } from '../types';
-import { AppError } from '@/core/errors/AppError';
+import { FeatureRepository } from '../repositories/featureRepository';
+import { Feature, FeatureList, CreateFeatureInput } from '../types';
+import { AppError } from 'core/errors/AppError';
 
-export class TodoService {
-  constructor(private repository: TodoRepository) {}
+export class FeatureService {
+  constructor(private repository: FeatureRepository) {}
 
-  async getAllTodos(): Promise<TodoList> {
+  async getAll(): Promise<FeatureList> {
     try {
-      return await this.repository.getTodos();
+      return await this.repository.getAll();
     } catch (error) {
-      throw new AppError('Failed to fetch todos', 'FETCH_ERROR');
+      throw new AppError('Failed to fetch items', 'FETCH_ERROR');
     }
   }
 
-  async addTodo(todo: CreateTodoInput): Promise<Todo> {
+  async create(input: CreateFeatureInput): Promise<Feature> {
     try {
-      return await this.repository.createTodo(todo);
+      return await this.repository.create(input);
     } catch (error) {
-      throw new AppError('Failed to create todo', 'CREATE_ERROR');
+      throw new AppError('Failed to create item', 'CREATE_ERROR');
     }
   }
 
-  async toggleTodoCompletion(id: string): Promise<Todo> {
+  async update(id: string, data: Partial<Feature>): Promise<Feature> {
     try {
-      const todo = await this.repository.getTodoById(id);
-      return await this.repository.updateTodo(id, { completed: !todo.completed });
+      return await this.repository.update(id, data);
     } catch (error) {
       if (error instanceof AppError) throw error;
-      throw new AppError('Failed to toggle todo completion', 'UPDATE_ERROR');
+      throw new AppError('Failed to update item', 'UPDATE_ERROR');
     }
   }
 
-  async deleteTodo(id: string): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     try {
-      return await this.repository.deleteTodo(id);
+      return await this.repository.delete(id);
     } catch (error) {
-      throw new AppError('Failed to delete todo', 'DELETE_ERROR');
+      throw new AppError('Failed to delete item', 'DELETE_ERROR');
     }
   }
 }
 ```
 
-#### Components (`src/features/todos/components/TodoList.tsx`)
+#### Server Actions (`src/features/[feature-name]/actions/featureActions.ts`)
 
 ```typescript
-import React, { useState } from 'react';
-import { Todo, TodoList as TodoListType, CreateTodoInput, TodoError } from '../types';
-import { TodoService } from '../services/todoService';
-import { createTodoSchema } from '../schemas';
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Trash2, PlusCircle } from 'lucide-react'
-import { ErrorBoundary } from './ErrorBoundary';
+'use server';
 
-interface TodoListProps {
-  initialTodos: TodoListType;
-  todoService: TodoService;
+import { revalidatePath } from 'next/cache';
+import { FeatureService } from '../services/featureService';
+import { MockFeatureRepository } from '../repositories/mockFeatureRepository';
+import { CreateFeatureInput } from '../types';
+import { createFeatureSchema } from '../schemas';
+
+const repository = new MockFeatureRepository();
+const service = new FeatureService(repository);
+
+export async function createFeature(formData: FormData) {
+  const input = {
+    title: formData.get('title'),
+    // Add other fields as needed
+  };
+
+  try {
+    const validatedData = createFeatureSchema.parse(input);
+    await service.create(validatedData);
+    revalidatePath('/[feature-name]');
+  } catch (error) {
+    return { error: 'Failed to create item' };
+  }
 }
 
-export const TodoList: React.FC<TodoListProps> = ({ initialTodos, todoService }) => {
-  const [todos, setTodos] = useState<TodoListType>(initialTodos);
-  const [newTodoTitle, setNewTodoTitle] = useState('');
-  const [error, setError] = useState<TodoError | null>(null);
+export async function updateFeature(id: string, data: Partial<CreateFeatureInput>) {
+  try {
+    await service.update(id, data);
+    revalidatePath('/[feature-name]');
+  } catch (error) {
+    return { error: 'Failed to update item' };
+  }
+}
 
-  const addTodo = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    try {
-      const input: CreateTodoInput = { title: newTodoTitle };
-      await createTodoSchema.parseAsync(input);
-      const newTodo = await todoService.addTodo(input);
-      setTodos([...todos, newTodo]);
-      setNewTodoTitle('');
-    } catch (err) {
-      if (err instanceof Error) {
-        setError({ message: err.message });
-      }
-    }
-  };
+export async function deleteFeature(id: string) {
+  try {
+    await service.delete(id);
+    revalidatePath('/[feature-name]');
+  } catch (error) {
+    return { error: 'Failed to delete item' };
+  }
+}
+```
 
-  const toggleTodo = async (id: string) => {
-    try {
-      const updatedTodo = await todoService.toggleTodoCompletion(id);
-      setTodos(todos.map(todo => todo.id === id ? updatedTodo : todo));
-    } catch (err) {
-      if (err instanceof Error) {
-        setError({ message: err.message });
-      }
-    }
-  };
+### 3. Implement Page Component (if needed)
 
-  const deleteTodo = async (id: string) => {
-    try {
-      const success = await todoService.deleteTodo(id);
-      if (success) {
-        setTodos(todos.filter(todo => todo.id !== id));
-      }
-    } catch (err) {
-      if (err instanceof Error) {
-        setError({ message: err.message });
-      }
-    }
-  };
+Create a new file `src/app/[feature-name]/page.tsx`:
 
-  return (
-    <ErrorBoundary>
-      <Card className="w-full max-w-md mx-auto mt-10">
-        <CardHeader>
-          <CardTitle>Todo List</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {error && <div className="text-red-500 mb-4">{error.message}</div>}
-          <ul className="space-y-2">
-            {todos.map(todo => (
-              <li key={todo.id} className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    checked={todo.completed}
-                    onCheckedChange={() => toggleTodo(todo.id)}
-                    id={`todo-${todo.id}`}
-                  />
-                  <label
-                    htmlFor={`todo-${todo.id}`}
-                    className={`text-sm ${todo.completed ? 'line-through text-muted-foreground' : ''}`}
-                  >
-                    {todo.title}
-                  </label>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => deleteTodo(todo.id)}
-                >
-                  <Trash2 className="h-4 w-4 text-destructive" />
-                </Button>
-              </li>
-            ))}
-          </ul>
-        </CardContent>
-        <CardFooter>
-          <form onSubmit={addTodo} className="flex w-full space-x-2">
-            <Input
-              type="text"
-              placeholder="Add a new todo"
-              value={newTodoTitle}
-              onChange={(e) => setNewTodoTitle(e.target.value)}
-              className="flex-grow"
-            />
-            <Button type="submit">
-              <PlusCircle className="h-4 w-4 mr-2" />
-              Add
-            </Button>
-          </form>
-        </CardFooter>
-      </Card>
-    </ErrorBoundary>
-  );
+```typescript
+import { Suspense } from 'react';
+import { FeatureComponent } from 'features/[feature-name]/components/FeatureComponent';
+import { FeatureService } from 'features/[feature-name]/services/featureService';
+import { MockFeatureRepository } from 'features/[feature-name]/repositories/mockFeatureRepository';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Feature Name',
+  description: 'Feature description'
 };
 
-export default TodoList;
-```
-
-### 3. Implement API Routes (if needed)
-
-Create a new file `src/app/api/todos/route.ts`:
-
-```typescript
-import { TodoService } from '@/features/todos/services/todoService';
-import { MockTodoRepository } from '@/features/todos/repositories/mockTodoRepository';
-import { createTodoSchema, todoListSchema } from '@/features/todos/schemas';
-import { NextResponse } from 'next/server';
-import { AppError } from '@/core/errors/AppError';
-
-const todoRepository = new MockTodoRepository();
-const todoService = new TodoService(todoRepository);
-
-export async function GET() {
-  try {
-    const todos = await todoService.getAllTodos();
-    return NextResponse.json(todoListSchema.parse(todos));
-  } catch (error) {
-    if (error instanceof AppError) {
-      return NextResponse.json({ error: error.message }, { status: 400 });
-    }
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
-  }
-}
-
-export async function POST(request: Request) {
-  try {
-    const body = await request.json();
-    const validatedData = createTodoSchema.parse(body);
-    const newTodo = await todoService.addTodo(validatedData);
-    return NextResponse.json(newTodo);
-  } catch (error) {
-    if (error instanceof AppError) {
-      return NextResponse.json({ error: error.message }, { status: 400 });
-    }
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
-  }
-}
-```
-
-### 4. Implement Page Component (if needed)
-
-Create a new file `src/app/todos/page.tsx`:
-
-```typescript
-import { TodoList } from '@/features/todos/components/TodoList';
-import { TodoService } from '@/features/todos/services/todoService';
-import { MockTodoRepository } from '@/features/todos/repositories/mockTodoRepository';
-
-export default async function TodosPage() {
-  const todoRepository = new MockTodoRepository();
-  const todoService = new TodoService(todoRepository);
+export default async function FeaturePage() {
+  const repository = new MockFeatureRepository();
+  const service = new FeatureService(repository);
   
-  try {
-    const todos = await todoService.getAllTodos();
-    return <TodoList initialTodos={todos} todoService={todoService} />;
-  } catch (error) {
-    return <div>Error loading todos. Please try again later.</div>;
-  }
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <FeatureComponent service={service} />
+    </Suspense>
+  );
+}
+```
+
+### 4. Implement Feature Component
+
+```typescript
+'use client';
+
+import { useOptimistic, useFormStatus, useFormState } from 'react';
+import { createFeature, updateFeature, deleteFeature } from '../actions/featureActions';
+import { Feature } from '../types';
+
+interface FeatureComponentProps {
+  service: FeatureService;
+}
+
+export function FeatureComponent({ service }: FeatureComponentProps) {
+  const { pending } = useFormStatus();
+  const [optimisticItems, addOptimisticItem] = useOptimistic<Feature[]>(
+    [],
+    (state, newItem: Feature) => [...state, newItem]
+  );
+
+  return (
+    <div>
+      <form
+        action={async (formData) => {
+          const title = formData.get('title');
+          // Add optimistic update
+          addOptimisticItem({ id: 'temp-id', title: title as string });
+          await createFeature(formData);
+        }}
+      >
+        {/* Form fields */}
+        <button type="submit" disabled={pending}>
+          Add Item
+        </button>
+      </form>
+
+      {/* Display items */}
+      <ul>
+        {optimisticItems.map((item) => (
+          <li key={item.id}>{item.title}</li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 ```
 
@@ -394,13 +331,20 @@ export default async function TodosPage() {
 
 When implementing new features, keep these best practices in mind:
 
+- Use Server Actions for form submissions and data mutations
+- Implement Partial Prerendering for improved performance
+- Utilize React 19's new hooks (useOptimistic, useFormStatus, useFormState)
+- Use the Document Metadata API for dynamic metadata
+- Implement proper Suspense boundaries for loading states
 - Use Zod schemas for all data validation and type inference
-- Keep the repository implementation (mock or real) separate from the interface
+- Keep the repository implementation separate from the interface
 - Use dependency injection to provide the repository to the service
 - Implement proper error handling in both frontend and API routes
-- Use existing UI components from the `components/ui` directory for consistent styling
-- Ensure all components work well in both light and dark modes
-- Consider using global state management (e.g., Zustand) for complex state requirements
-- Implement progressive enhancement techniques for better performance and accessibility
+- Use existing UI components from the `components/ui` directory
+- Ensure components work well in both light and dark modes
+- Consider using global state management (e.g., Zustand) for complex state
+- Implement progressive enhancement techniques
+- Use React 19's automatic memo optimization
+- Take advantage of Next.js 15's improved static/dynamic rendering
 
-By following this guide and the provided example, you can implement new features in your existing Next.js application while maintaining a clean and scalable architecture.
+By following this guide, you can implement new features in your Next.js 15 application while maintaining a clean and scalable architecture. The template provides a foundation that can be customized based on your specific feature requirements while ensuring consistency in the codebase and leveraging the latest React 19 features.
