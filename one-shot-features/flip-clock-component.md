@@ -1,4 +1,5 @@
-# PRD: React Flip Clock Component (Fliqslo-style)
+# PRD: React Flip Clock Component
+image reference for design: https://fliqlo.com/images/main.png
 
 **Version:** 1.0
 **Date:** October 26, 2023
