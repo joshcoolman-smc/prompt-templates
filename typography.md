@@ -1,3 +1,7 @@
+Use next/font
+Headings : IBM Plex Sans (all weights and include italics)
+Subheadings / body : IBM Plex Serif (all weights and include italics)
+
 Create a comprehensive typography showcase webpage demonstrating a 4pt grid system using Tailwind CSS with a dark zinc color palette. Build this as a single HTML file with embedded Tailwind CSS.
 
 ### **Requirements:**
