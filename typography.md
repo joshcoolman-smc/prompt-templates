@@ -1,5 +1,3 @@
-# Typography Showcase with 4pt Grid System
-
 Create a comprehensive typography showcase webpage demonstrating a 4pt grid system using Tailwind CSS with a dark zinc color palette. Build this as a single HTML file with embedded Tailwind CSS.
 
 Use next/font with:
