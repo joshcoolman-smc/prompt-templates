@@ -1,7 +1,8 @@
-
+```
 HEADING FONT = Montserrat
 SUBHEADING FONT = Lora
 BODY FONT = Hind Madurai
+```
 
 
 Create a Next.js typography showcase page that demonstrates a 4pt grid system with customizable font pairings. Use the following configuration:
