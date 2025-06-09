@@ -1,65 +1,101 @@
-Create a comprehensive typography showcase webpage demonstrating a 4pt grid system using Tailwind CSS with a dark zinc color palette. Build this as a single HTML file with embedded Tailwind CSS.
+# Typography Showcase Template
 
-Use next/font with:
-- Headings: IBM Plex Sans (all weights and include italics)
-- Subheadings / body: IBM Plex Serif (all weights and include italics)
+Create a Next.js typography showcase page that demonstrates a 4pt grid system with customizable font pairings. Use the following configuration:
+
+## Font Configuration
+- **Heading Font**: [HEADING_FONT] (weights: 400, 500, 600, 700 | styles: normal, italic)
+- **Body Font**: [BODY_FONT] (weights: 400, 500, 600, 700 | styles: normal, italic)
 
 ## Requirements
 
-### Technical Setup
-- Single HTML file with Tailwind CSS via CDN
-- Dark-first design using zinc color palette
-- 4pt grid system for all spacing (multiples of 4px: 4, 8, 12, 16, 20, 24, 32, etc.)
-- Responsive design that works on mobile and desktop
-- Optional: Visual 4px grid overlay toggle
+### 1. Font Setup
+Use \`next/font/google\` to import the specified fonts with CSS variables:
+- Heading font variable: \`--font-heading\`
+- Body font variable: \`--font-body\`
 
-### Color System
-Use a zinc color palette with appropriate hierarchy for dark mode. Create distinct layers for backgrounds, cards, interactive elements, and borders. Establish clear text hierarchy from primary headings to subtle/disabled text using appropriate zinc color values.
+### 2. Tailwind Configuration
+Update \`tailwind.config.ts\` to include custom font families:
+\`\`\`typescript
+fontFamily: {
+  heading: ["var(--font-heading)", "sans-serif"],
+  body: ["var(--font-body)", "serif"],
+}
+\`\`\`
 
-### Typography Scale
-Implement a typography scale aligned to the 4pt grid with font sizes ranging from text-xs to text-6xl. Ensure all line heights are multiples of 4px to maintain vertical rhythm. Use the IBM Plex Sans for headings and IBM Plex Serif for body content.
+### 3. Page Structure
+Create a typography showcase page with the following sections:
 
-### Spacing System
-All margins, padding, and gaps must use 4px increments. Apply consistent spacing patterns throughout the design using Tailwind's spacing utilities that align with the 4pt grid system.
+#### Main Article Section
+- Article container: \`bg-zinc-900/50 border border-zinc-800 rounded-xl p-8\`
+- Header with:
+  - H1: "The Future of Design Systems" (\`font-heading text-4xl font-bold\`)
+  - Subtitle: "How consistent typography and spacing create better user experiences" (\`font-body text-xl italic\`)
+  - Meta info: Date, read time, category (\`text-sm text-zinc-500\`)
+- Content with:
+  - H2: "The 4pt Grid System" (\`font-heading text-2xl font-semibold\`)
+  - H3: "Key Benefits" (\`font-heading text-xl font-medium\`)
+  - Body paragraphs (\`font-body text-base\` and \`font-body text-lg\`)
+  - Blockquote with citation (\`font-body\`)
+  - Bulleted list (\`font-body text-base\`)
+  - Pro tip callout box
 
-## Content Sections to Include
+#### UI Component Examples
+- Card component with workshop details
+- Contact form with email and message fields
+- Button examples (Primary, Secondary, Outline)
 
-### Typography Scale Showcase
-Display all heading levels (H1-H6) with proper color hierarchy. Include body text examples in different sizes and code snippets showing the Tailwind classes used. Add visual indicators to demonstrate 4pt grid alignment.
+### 4. Typography Classes
+Use these specific font classes throughout:
+- \`font-heading\`: All headings (h1, h2, h3), labels, buttons
+- \`font-body\`: All body text, paragraphs, form inputs, small text
 
-### Real Content Example
-Create a full article layout including:
-- Article title and subtitle
-- Meta information (date, reading time, etc.)
-- Body paragraphs with proper spacing
-- Section headings
-- Blockquote with styled border
-- Bulleted list with proper spacing
-- Call-out box or highlighted content area
+### 5. Color Scheme
+Use zinc color palette on dark background:
+- Background: \`bg-zinc-950\`
+- Text colors: \`text-zinc-50\`, \`text-zinc-100\`, \`text-zinc-200\`, \`text-zinc-300\`, \`text-zinc-400\`, \`text-zinc-500\`
+- Component backgrounds: \`bg-zinc-900\`, \`bg-zinc-800\`
+- Borders: \`border-zinc-800\`, \`border-zinc-700\`, \`border-zinc-600\`
 
-### UI Component Examples
-Build practical component examples:
+### 6. Spacing System
+Follow 4pt grid system using Tailwind's spacing scale (multiples of 4px):
+- Container padding: \`p-6\`, \`p-8\`
+- Section spacing: \`space-y-4\`, \`space-y-6\`, \`space-y-8\`
+- Component gaps: \`gap-3\`, \`gap-4\`, \`gap-6\`, \`gap-8\`
 
-1. **Card Component**: Include title, content, and action button with proper spacing throughout
+### 7. Responsive Design
+- Max width container: \`max-w-4xl mx-auto\`
+- Grid layouts: \`lg:grid-cols-2\`, \`sm:grid-cols-2 lg:grid-cols-3\`
+- Responsive padding: \`px-6 py-8\`
 
-2. **Form Component**: Show form labels, input fields, helper text, and submit button with appropriate spacing
+### 8. Interactive Elements
+- Hover states for buttons and form elements
+- Focus states with ring utilities
+- Transition animations: \`transition-colors duration-200\`
 
-3. **Navigation/Button Examples**: Display primary buttons, secondary buttons, and demonstrate hover/focus states
+## Implementation Notes
 
-## Key Principles to Follow
-- **Contrast**: Ensure proper contrast ratios for accessibility (4.5:1 for body text, 3:1 for large text)
-- **Hierarchy**: Create clear visual distinction between heading levels
-- **Consistency**: All spacing uses 4px multiples
-- **Readability**: Maintain optimal line lengths (45-75 characters)
-- **Accessibility**: Include proper focus states and semantic HTML
-- **Performance**: Keep as single file with minimal external dependencies
+### Font Loading Best Practices
+1. Import fonts at the top of the page component
+2. Apply font variables to the root container
+3. Set fallback fonts in Tailwind config
+4. Use \`display: 'swap'\` for better loading performance
 
-## Success Criteria
-- All elements visually align to a 4px grid
-- Text hierarchy is immediately apparent
-- Dark theme feels sophisticated, not harsh
-- Code is clean and well-documented
-- Examples are practical and reusable
-- Typography feels consistent and professional
+### Accessibility Considerations
+- Proper heading hierarchy (h1 → h2 → h3)
+- Sufficient color contrast ratios
+- Focus indicators for interactive elements
+- Semantic HTML structure
 
-Build this as a complete, working HTML file that demonstrates professional typography systems while giving practical examples that can be referenced for future projects.
+### Performance Optimization
+- Preload critical fonts
+- Use font-display: swap
+- Subset fonts to required characters if needed
+
+## Example Font Combinations
+- **Classic**: IBM Plex Sans + IBM Plex Serif
+- **Modern**: Inter + Source Serif Pro
+- **Editorial**: Playfair Display + Source Sans Pro
+- **Technical**: JetBrains Mono + IBM Plex Sans
+- **Elegant**: Crimson Text + Open Sans
+
+Replace \`[HEADING_FONT]\` and \`[BODY_FONT]\` with your chosen Google Fonts, ensuring they support the required weights and styles.
