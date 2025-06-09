@@ -53,18 +53,6 @@ All margins, padding, and gaps must use 4px increments:
 - mb-4 (16px), mb-6 (24px), mb-8 (32px) for margins
 
 ### **5. Content Sections to Include:**
-
-#### **A. Header Section**
-- Large title using text-5xl or text-6xl with zinc-50
-- Subtitle with zinc-300
-- Tag badges showing "Dark First", "4pt Grid", "Zinc Palette"
-
-#### **B. Zinc Color Demonstration**
-- Visual grid showing all zinc colors (zinc-50 through zinc-950)
-- Text examples at each color level
-- Background surface examples
-- Include color codes and Tailwind class names
-
 #### **C. Typography Scale Showcase**
 - All heading levels (H1-H6) with proper zinc colors
 - Body text examples in different sizes
@@ -103,38 +91,6 @@ All margins, padding, and gaps must use 4px increments:
    - Hover states: zinc-500, zinc-700
    - Focus states with proper ring colors
 
-#### **F. Code Documentation**
-- Tailwind config snippet showing zinc color definitions
-- Example HTML snippets for each component
-- Class combination examples
-- Best practices list
-
-### **6. Interactive Features**
-- Optional: Toggle to show/hide 4px grid overlay
-- Hover effects on interactive elements
-- Smooth transitions using transition-colors
-- Focus states for accessibility
-
-### **7. Structure Requirements**
-```html
-<!DOCTYPE html>
-<html class="dark">
-<head>
-  <!-- Tailwind CSS CDN -->
-  <!-- Custom config for zinc colors and 4pt spacing -->
-</head>
-<body class="bg-zinc-950 text-zinc-200">
-  <header class="bg-zinc-900 border-b border-zinc-800">
-    <!-- Main title and navigation -->
-  </header>
-  
-  <main class="max-w-4xl mx-auto px-6 py-8 space-y-8">
-    <!-- All content sections -->
-  </main>
-</body>
-</html>
-```
-
 ### **8. Key Principles to Follow**
 - **Contrast**: Ensure 4.5:1 ratio for body text, 3:1 for large text
 - **Hierarchy**: Clear visual distinction between heading levels
@@ -151,9 +107,3 @@ All margins, padding, and gaps must use 4px increments:
 - Examples are practical and reusable
 - Typography feels consistent and professional
 
-### **Output Format**
-Provide a complete, working HTML file that demonstrates professional typography using the 4pt grid system and zinc color palette. Include comments explaining the design decisions and class choices.
-
----
-
-**Example usage:** "Create a typography showcase following this specification, focusing on practical examples I can use in my React/Tailwind projects."
