@@ -1,105 +1,62 @@
-Use next/font
-Headings : IBM Plex Sans (all weights and include italics)
-Subheadings / body : IBM Plex Serif (all weights and include italics)
+# Typography Showcase with 4pt Grid System
 
 Create a comprehensive typography showcase webpage demonstrating a 4pt grid system using Tailwind CSS with a dark zinc color palette. Build this as a single HTML file with embedded Tailwind CSS.
 
-### **Requirements:**
+Use next/font with:
+- Headings: IBM Plex Sans (all weights and include italics)
+- Subheadings / body: IBM Plex Serif (all weights and include italics)
 
-#### **1. Technical Setup**
+## Requirements
+
+### Technical Setup
 - Single HTML file with Tailwind CSS via CDN
-- Dark-first design using zinc color palette (zinc-50 to zinc-950)
+- Dark-first design using zinc color palette
 - 4pt grid system for all spacing (multiples of 4px: 4, 8, 12, 16, 20, 24, 32, etc.)
 - Responsive design that works on mobile and desktop
 - Optional: Visual 4px grid overlay toggle
 
-#### **2. Color System (Zinc Palette)**
-```
-Background Layers:
-- Base: zinc-950 (darkest background)
-- Cards: zinc-900 (elevated surfaces)  
-- Interactive: zinc-800 (buttons, inputs)
-- Borders: zinc-700, zinc-600
+### Color System
+Use a zinc color palette with appropriate hierarchy for dark mode. Create distinct layers for backgrounds, cards, interactive elements, and borders. Establish clear text hierarchy from primary headings to subtle/disabled text using appropriate zinc color values.
 
-Text Hierarchy:
-- Primary headings: zinc-50 (brightest)
-- Secondary text: zinc-100, zinc-200
-- Body text: zinc-200, zinc-300
-- Muted text: zinc-400, zinc-500
-- Subtle/disabled: zinc-600
-```
+### Typography Scale
+Implement a typography scale aligned to the 4pt grid with font sizes ranging from text-xs to text-6xl. Ensure all line heights are multiples of 4px to maintain vertical rhythm. Use the IBM Plex Sans for headings and IBM Plex Serif for body content.
 
-#### **3. Typography Scale (4pt Grid Aligned)**
-```
-Font Sizes with Line Heights:
-- text-xs: 12px / 16px line-height
-- text-sm: 14px / 20px line-height  
-- text-base: 16px / 24px line-height
-- text-lg: 18px / 28px line-height
-- text-xl: 20px / 28px line-height
-- text-2xl: 24px / 32px line-height
-- text-3xl: 30px / 36px line-height
-- text-4xl: 36px / 40px line-height
-- text-5xl: 48px / 52px line-height
-- text-6xl: 60px / 64px line-height
-```
+### Spacing System
+All margins, padding, and gaps must use 4px increments. Apply consistent spacing patterns throughout the design using Tailwind's spacing utilities that align with the 4pt grid system.
 
-#### **4. Spacing System**
-All margins, padding, and gaps must use 4px increments:
-- space-y-1 (4px), space-y-2 (8px), space-y-3 (12px)
-- space-y-4 (16px), space-y-5 (20px), space-y-6 (24px)  
-- space-y-8 (32px), space-y-10 (40px), space-y-12 (48px)
-- p-4 (16px), p-6 (24px), p-8 (32px) for padding
-- mb-4 (16px), mb-6 (24px), mb-8 (32px) for margins
+## Content Sections to Include
 
-### **5. Content Sections to Include:**
-#### **C. Typography Scale Showcase**
-- All heading levels (H1-H6) with proper zinc colors
-- Body text examples in different sizes
-- Code snippets showing the exact Tailwind classes used
-- Visual indicators showing 4pt grid alignment
+### Typography Scale Showcase
+Display all heading levels (H1-H6) with proper color hierarchy. Include body text examples in different sizes and code snippets showing the Tailwind classes used. Add visual indicators to demonstrate 4pt grid alignment.
 
-#### **D. Real Content Example** 
-- Full article layout with:
-  - Article title (text-4xl, zinc-50)
-  - Subtitle/lead (text-xl, zinc-300)  
-  - Meta information (text-sm, zinc-500)
-  - Body paragraphs (text-base, zinc-200)
-  - Section headings (text-2xl, zinc-100)
-  - Blockquote with zinc-500 border
-  - Bulleted list with proper spacing
-  - Call-out box with zinc-800 background
+### Real Content Example
+Create a full article layout including:
+- Article title and subtitle
+- Meta information (date, reading time, etc.)
+- Body paragraphs with proper spacing
+- Section headings
+- Blockquote with styled border
+- Bulleted list with proper spacing
+- Call-out box or highlighted content area
 
-#### **E. UI Component Examples**
-1. **Card Component:**
-   - zinc-900 background with zinc-800 border
-   - Card title (text-lg, zinc-100)
-   - Card content (text-base, zinc-300)
-   - Button with zinc-700 background
-   - 4pt grid spacing throughout (p-6, space-y-4)
+### UI Component Examples
+Build practical component examples:
 
-2. **Form Component:**
-   - Form labels (text-sm, zinc-300)
-   - Input fields with zinc-900 background, zinc-600 borders
-   - Helper text (text-xs, zinc-500)
-   - Submit button (zinc-700 background, hover:zinc-600)
-   - Proper spacing using 4pt increments
+1. **Card Component**: Include title, content, and action button with proper spacing throughout
 
-3. **Navigation/Button Examples:**
-   - Primary buttons: zinc-600 background
-   - Secondary buttons: zinc-800 with zinc-600 border  
-   - Hover states: zinc-500, zinc-700
-   - Focus states with proper ring colors
+2. **Form Component**: Show form labels, input fields, helper text, and submit button with appropriate spacing
 
-### **8. Key Principles to Follow**
-- **Contrast**: Ensure 4.5:1 ratio for body text, 3:1 for large text
-- **Hierarchy**: Clear visual distinction between heading levels
+3. **Navigation/Button Examples**: Display primary buttons, secondary buttons, and demonstrate hover/focus states
+
+## Key Principles to Follow
+- **Contrast**: Ensure proper contrast ratios for accessibility (4.5:1 for body text, 3:1 for large text)
+- **Hierarchy**: Create clear visual distinction between heading levels
 - **Consistency**: All spacing uses 4px multiples
-- **Readability**: Optimal line lengths (45-75 characters)
-- **Accessibility**: Proper focus states and semantic HTML
-- **Performance**: Single file, minimal external dependencies
+- **Readability**: Maintain optimal line lengths (45-75 characters)
+- **Accessibility**: Include proper focus states and semantic HTML
+- **Performance**: Keep as single file with minimal external dependencies
 
-### **9. Success Criteria**
+## Success Criteria
 - All elements visually align to a 4px grid
 - Text hierarchy is immediately apparent
 - Dark theme feels sophisticated, not harsh
@@ -107,3 +64,4 @@ All margins, padding, and gaps must use 4px increments:
 - Examples are practical and reusable
 - Typography feels consistent and professional
 
+Build this as a complete, working HTML file that demonstrates professional typography systems while giving practical examples that can be referenced for future projects.
