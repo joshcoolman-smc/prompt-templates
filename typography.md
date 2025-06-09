@@ -8,7 +8,7 @@ Create a Next.js typography showcase page that demonstrates a 4pt grid system wi
 
 ## Font Configuration
 - **Heading Font**: [HEADING_FONT] (all weights | styles: normal, italic)
-- **Sub Heading font**L [SUBHEADING FONT] (normal, bold, semibold wheights | styles: normal, italic)
+- **Subheading font**: [SUBHEADING FONT] (normal, bold, semibold wheights | styles: normal, italic)
 - **Body Font**: [BODY_FONT] (normal, bold, semibold weights | styles: normal, italic)
 
 ## Requirements
