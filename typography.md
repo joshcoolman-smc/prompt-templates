@@ -1,10 +1,15 @@
-# Typography Showcase Template
+
+HEADING FONT = Montserrat
+SUBHEADING FONT = Lora
+BODY FONT = Hind Madurai
+
 
 Create a Next.js typography showcase page that demonstrates a 4pt grid system with customizable font pairings. Use the following configuration:
 
 ## Font Configuration
-- **Heading Font**: [HEADING_FONT] (weights: 400, 500, 600, 700 | styles: normal, italic)
-- **Body Font**: [BODY_FONT] (weights: 400, 500, 600, 700 | styles: normal, italic)
+- **Heading Font**: [HEADING_FONT] (all weights | styles: normal, italic)
+- **Sub Heading font**L [SUBHEADING FONT] (normal, bold, semibold wheights | styles: normal, italic)
+- **Body Font**: [BODY_FONT] (normal, bold, semibold weights | styles: normal, italic)
 
 ## Requirements
 
@@ -52,8 +57,8 @@ Use these specific font classes throughout:
 ### 5. Color Scheme
 Use zinc color palette on dark background:
 - Background: \`bg-zinc-950\`
-- Text colors: \`text-zinc-50\`, \`text-zinc-100\`, \`text-zinc-200\`, \`text-zinc-300\`, \`text-zinc-400\`, \`text-zinc-500\`
-- Component backgrounds: \`bg-zinc-900\`, \`bg-zinc-800\`
+- Text colors: \`text-zinc-200\`, \`text-zinc-300\`, \`text-zinc-400\`, \`text-zinc-500\`
+- Component backgrounds: \`bg-zinc-900\`, \`bg-zinc-800\`, \`bg-zinc-950\`
 - Borders: \`border-zinc-800\`, \`border-zinc-700\`, \`border-zinc-600\`
 
 ### 6. Spacing System
@@ -90,12 +95,3 @@ Follow 4pt grid system using Tailwind's spacing scale (multiples of 4px):
 - Preload critical fonts
 - Use font-display: swap
 - Subset fonts to required characters if needed
-
-## Example Font Combinations
-- **Classic**: IBM Plex Sans + IBM Plex Serif
-- **Modern**: Inter + Source Serif Pro
-- **Editorial**: Playfair Display + Source Sans Pro
-- **Technical**: JetBrains Mono + IBM Plex Sans
-- **Elegant**: Crimson Text + Open Sans
-
-Replace \`[HEADING_FONT]\` and \`[BODY_FONT]\` with your chosen Google Fonts, ensuring they support the required weights and styles.
