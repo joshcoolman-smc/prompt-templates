@@ -1,12 +1,4 @@
-# Code Review Template
-
-## Overview
 Please perform a comprehensive code review of the provided code/changes. Focus on code quality, best practices, security, performance, and maintainability. Provide specific, actionable feedback with examples where applicable.
-
-## Review Scope
-**Files to Review**: [Specify files or paste code here]
-**Context**: [Brief description of what this code does and its purpose]
-**Change Type**: [New feature / Bug fix / Refactor / Performance improvement / Other]
 
 ## Review Criteria
 
