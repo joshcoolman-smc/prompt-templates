@@ -108,21 +108,7 @@ Please perform a comprehensive code review of the provided code/changes. Focus o
   const containerStyle = {padding: '10px', margin: '5px'};
   <div style={containerStyle}>
   ```
-
-## Additional Review Prompts
-
-### Code Quality Deep Dive
-"Please analyze this code for potential improvements in readability, maintainability, and performance. Focus specifically on [area of concern]."
-
-### Security Review
-"Perform a security-focused review of this code. Pay special attention to input validation, authentication, and potential vulnerabilities."
-
-### Performance Analysis
-"Review this code for performance bottlenecks. Identify any expensive operations, unnecessary re-renders, or optimization opportunities."
-
-### Architecture Review
-"Evaluate the architectural decisions in this code. Does it follow established patterns? How well does it integrate with the existing codebase?"
-
+  
 ## Summary Request
 
 At the end of the review, please provide:
