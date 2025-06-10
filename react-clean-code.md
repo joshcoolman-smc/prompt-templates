@@ -189,31 +189,6 @@ routes/complex-page/
 └── index.tsx                      # Main page route
 ```
 
-## Communication Template
-
-When requesting new features or pages, use this template:
-
-```
-Route: [page-path]
-Description: [purpose and functionality]
-User Access: [access requirements]
-Layout Type: [simple | sectioned | other]
-
-Required Business Logic:
-- [business-domain]: [operations needed]
-- [another-domain]: [operations needed]
-
-Page Sections (if applicable):
-- [section-name]: [what it displays/does]
-- [another-section]: [what it displays/does]
-
-Components Needed:
-- [ComponentName]: [purpose and behavior]
-- [AnotherComponent]: [purpose and behavior]
-
-Data Source: [mock | API | database]
-```
-
 ## Best Practices
 
 ### DO ✅
@@ -249,13 +224,4 @@ Data Source: [mock | API | database]
 - Configure routing with React Router
 - Handle build configuration for path resolution
 
-## Quick Reference
 
-**Adding business domain?** → Create `features/[business-domain]/` with types → repository → service → hook
-**Adding new page?** → Create `routes/[page-path]/` with components specific to that route
-**Adding page section?** → Create `routes/[page-path]/[section]/` subdirectory
-**Finding page code?** → Look in `routes/[page-path]/`
-**Finding business logic?** → Look in `features/[business-domain]/`
-**Need shared component?** → Verify 3+ use cases, then add to `shared/components/`
-
-This structure ensures predictable code organization and maintainable architecture regardless of application complexity or specific requirements.
