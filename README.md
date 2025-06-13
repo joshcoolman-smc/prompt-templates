@@ -1,1 +1,3 @@
-Just a bunch of prompts you may or not find useful.
+Just a bunch of prompts you may or may not find useful. I mean, seriously, no one knows what's going on. We're all prompting like mad men, trying to figure out what these agents are doing. I'm having a blast, but man, this stuff moves fast.
+
+Anyway, this is just junk I put up here. I test, I don't maintain this particularly well. There's probably only two or three prompts I use on a regular basis. Maybe I'll hide them and highlight those at some point. Generally, you can post most of the paste most of these into something like the lovable or a vo especially those feature ones. Those are kind of cool, and it'll probably do a pretty good job of just generating pieces of UI or different types of pages or components that I think are at least a good start if nothing else. 
