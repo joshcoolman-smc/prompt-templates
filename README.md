@@ -166,6 +166,7 @@ npm test -- --coverage                 # Generate coverage report
 Additional resources are available in the [`_reference/`](_reference/) directory:
 - [`prompting-guidelines.md`](_reference/prompting-guidelines.md) - AI prompting best practices
 - [`code-review.md`](_reference/code-review.md) - Code review checklist template
+- [`mfa-patterns.md`](_reference/mfa-patterns.md) - Multi-factor authentication implementation patterns
 - Technology-specific reference guides
 
 ## 💡 Key Principles

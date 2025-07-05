@@ -1292,24 +1292,12 @@ CREATE POLICY "Admins can view all profiles" ON user_profiles
   );
 ```
 
-### Multi-Factor Authentication (MFA)
+### Advanced Security Features
 
-Consider implementing MFA for enhanced security:
-
-```typescript
-// Enable MFA for a user
-const { data, error } = await supabase.auth.mfa.enroll({
-  factorType: 'totp',
-  friendlyName: 'Work Phone'
-});
-
-// Verify MFA challenge
-const { data, error } = await supabase.auth.mfa.verify({
-  factorId: 'factor-id',
-  challengeId: 'challenge-id',
-  code: '123456'
-});
-```
+For enterprise applications requiring enhanced security:
+- **Multi-Factor Authentication (MFA)**: See [`_reference/mfa-patterns.md`](_reference/mfa-patterns.md) for comprehensive MFA implementation patterns
+- **Single Sign-On (SSO)**: Configure enterprise SSO providers through Supabase dashboard
+- **Advanced Role-Based Access Control (RBAC)**: Implement custom claims and complex permission systems
 
 ### Rate Limiting and Bot Protection
 
