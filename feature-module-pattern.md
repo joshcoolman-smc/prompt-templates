@@ -413,12 +413,3 @@ export default React.memo(ExpensiveComponent);
 
 ---
 
-## Summary of Key Principles
-
-1. **Type Safety**: Use TypeScript effectively throughout the codebase
-2. **Separation of Concerns**: Follow the repository-service-hooks pattern
-3. **Modular Organization**: Structure code by features, not technical concerns
-4. **Testability**: Write code that is easy to test in isolation
-5. **Error Handling**: Implement consistent, comprehensive error handling
-6. **Documentation**: Make code self-documenting and add explanations where needed
-7. **Performance**: Consider performance implications of implementation choices
