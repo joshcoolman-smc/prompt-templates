@@ -24,6 +24,8 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 pnpm add @supabase/supabase-js @supabase/ssr zod
 ```
 
+⚠️ **Important**: If you're migrating from an older Supabase setup, note that `@supabase/auth-helpers` is now **deprecated**. Use `@supabase/ssr` for all new projects and consider migrating existing projects to the new SSR package for better security and performance.
+
 ## Supabase Configuration
 
 ### Browser Client
@@ -149,30 +151,114 @@ export const updateSession = async (request: NextRequest) => {
 ```typescript
 // middleware.ts
 import { updateSession } from '@/lib/supabase/middleware';
-import { NextResponse, type NextRequest } from 'next/server';
+import { type NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
-  const response = await updateSession(request);
-  
-  // Protected routes
-  if (request.nextUrl.pathname.startsWith('/dashboard')) {
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    
-    if (!user) {
-      return NextResponse.redirect(new URL('/', request.url));
-    }
-  }
-  
-  return response;
+  // The updateSession function handles session refresh and user validation
+  // It automatically calls supabase.auth.getUser() to revalidate tokens
+  return await updateSession(request);
 }
 
 export const config = {
   matcher: [
+    /*
+     * Match all request paths except:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - files with extensions (images, etc.)
+     */
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };
 ```
+
+## Route Protection Patterns
+
+### Server Component Protection (Recommended)
+
+```typescript
+// app/dashboard/page.tsx
+import { createClient } from '@/lib/supabase/server';
+import { redirect } from 'next/navigation';
+
+export default async function DashboardPage() {
+  const supabase = createClient();
+  
+  // CRITICAL: Always use getUser() in server components for security
+  // Never trust getSession() as cookies can be spoofed
+  const { data: { user }, error } = await supabase.auth.getUser();
+  
+  if (error || !user) {
+    redirect('/login');
+  }
+
+  return (
+    <div>
+      <h1>Dashboard</h1>
+      <p>Welcome, {user.email}!</p>
+    </div>
+  );
+}
+```
+
+### Layout Protection
+
+```typescript
+// app/dashboard/layout.tsx
+import { createClient } from '@/lib/supabase/server';
+import { redirect } from 'next/navigation';
+
+export default async function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user) {
+    redirect('/login');
+  }
+
+  return (
+    <div className="dashboard-layout">
+      <nav>Dashboard Navigation</nav>
+      {children}
+    </div>
+  );
+}
+```
+
+### API Route Protection
+
+```typescript
+// app/api/protected/route.ts
+import { createClient } from '@/lib/supabase/server';
+import { NextResponse } from 'next/server';
+
+export async function GET() {
+  const supabase = createClient();
+  const { data: { user }, error } = await supabase.auth.getUser();
+  
+  if (error || !user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  // Protected API logic here
+  return NextResponse.json({ message: 'Success', userId: user.id });
+}
+```
+
+### Security Best Practices
+
+⚠️ **Critical Security Rules:**
+
+1. **Never use `getSession()` in server-side code** - cookies can be spoofed
+2. **Always use `getUser()` for authentication checks** - revalidates tokens server-side  
+3. **Protect at the layout level** for efficient route protection
+4. **Use Server Components for auth checks** whenever possible
+5. **Validate auth in API routes** before processing requests
 
 ## Authentication Types
 
@@ -1177,4 +1263,86 @@ describe('AuthService', () => {
 });
 ```
 
-This comprehensive authentication guide provides production-ready patterns for implementing secure authentication in Next.js applications with Supabase.
+## Additional Security Considerations
+
+### Row Level Security (RLS)
+
+Always implement Row Level Security for data protection:
+
+```sql
+-- Enable RLS on user profiles table
+ALTER TABLE user_profiles ENABLE ROW LEVEL SECURITY;
+
+-- Policy: Users can only view their own profile
+CREATE POLICY "Users can view own profile" ON user_profiles
+  FOR SELECT USING (auth.uid() = user_id);
+
+-- Policy: Users can update their own profile
+CREATE POLICY "Users can update own profile" ON user_profiles
+  FOR UPDATE USING (auth.uid() = user_id);
+
+-- Policy: Only admins can view all profiles
+CREATE POLICY "Admins can view all profiles" ON user_profiles
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM user_profiles 
+      WHERE user_id = auth.uid() 
+      AND role = 'admin'
+    )
+  );
+```
+
+### Multi-Factor Authentication (MFA)
+
+Consider implementing MFA for enhanced security:
+
+```typescript
+// Enable MFA for a user
+const { data, error } = await supabase.auth.mfa.enroll({
+  factorType: 'totp',
+  friendlyName: 'Work Phone'
+});
+
+// Verify MFA challenge
+const { data, error } = await supabase.auth.mfa.verify({
+  factorId: 'factor-id',
+  challengeId: 'challenge-id',
+  code: '123456'
+});
+```
+
+### Rate Limiting and Bot Protection
+
+Configure rate limiting in your Supabase project settings:
+- Auth rate limits for login attempts
+- Email rate limits for magic links
+- CAPTCHA protection for bot detection
+
+## Migration Notes
+
+### From @supabase/auth-helpers
+
+If migrating from the deprecated `@supabase/auth-helpers`:
+
+1. **Install new package**: Replace `@supabase/auth-helpers-nextjs` with `@supabase/ssr`
+2. **Update client creation**: Use `createBrowserClient` and `createServerClient`
+3. **Rewrite middleware**: Follow the new `updateSession` pattern
+4. **Update auth checks**: Always use `getUser()` instead of `getSession()`
+5. **Test thoroughly**: Verify all authentication flows work correctly
+
+### Current Status (2024)
+
+✅ **Up-to-date patterns using:**
+- `@supabase/ssr` package (current recommended approach)
+- Next.js 13+ App Router compatibility
+- Secure cookie-based session management
+- `getUser()` for server-side auth validation
+- Proper middleware implementation for token refresh
+
+⚠️ **Deprecated patterns to avoid:**
+- `@supabase/auth-helpers` package
+- `getSession()` in server-side code
+- Client-side only authentication checks
+- LocalStorage-based session management
+
+This comprehensive authentication guide provides production-ready patterns for implementing secure authentication in Next.js applications with Supabase using the latest 2024 best practices.
