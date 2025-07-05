@@ -11,7 +11,8 @@ This document provides guidelines for developing React components in Next.js app
 **1. UI Components** - Basic building blocks (buttons, inputs, cards)
 **2. Layout Components** - Structural elements (headers, sidebars, containers)
 **3. Feature Components** - Business logic components (user profiles, dashboards)
-**4. Page Components** - Top-level page components
+**4. Page Components** - Top-level page routes (always Server Components)
+**5. Display Components** - Interactive UI components (Client Components for pages)
 
 ### Component Organization
 
@@ -35,6 +36,61 @@ features/[feature]/
     ├── UserProfile.tsx
     ├── UserSettings.tsx
     └── index.ts
+```
+
+## Next.js Component Patterns
+
+### Server vs Client Components
+
+**Critical Rule**: Page routes (`app/*/page.tsx`) must ALWAYS be Server Components - never use `'use client'` in page files.
+
+#### Server Components (Default)
+Use for:
+- Page routes (`app/dashboard/page.tsx`)
+- Data fetching and authentication
+- Static content rendering
+- SEO-optimized pages
+
+```typescript
+// ✅ CORRECT: app/dashboard/page.tsx (Server Component)
+import { createClient } from '@/lib/supabase/server';
+import { DashboardDisplay } from '@/components/dashboard/DashboardDisplay';
+
+export default async function DashboardPage() {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user) redirect('/login');
+  
+  return <DashboardDisplay user={user} />;
+}
+```
+
+#### Client Components
+Use for:
+- Interactive UI components
+- State management
+- Event handlers
+- Browser APIs
+
+```typescript
+// ✅ CORRECT: components/dashboard/DashboardDisplay.tsx (Client Component)
+'use client';
+
+import { useState } from 'react';
+
+export function DashboardDisplay({ user }) {
+  const [activeTab, setActiveTab] = useState('overview');
+  
+  return (
+    <div>
+      <button onClick={() => setActiveTab('settings')}>
+        Settings
+      </button>
+      {/* Interactive content */}
+    </div>
+  );
+}
 ```
 
 ## Component Patterns

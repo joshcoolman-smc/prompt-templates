@@ -473,6 +473,8 @@ export class ServiceCache {
 
 ### Server Components vs Client Components
 
+**Critical Rule: Page routes must ALWAYS be Server Components** - never add `'use client'` to page.tsx files.
+
 Use Server Components by default, Client Components when needed:
 
 ```typescript
@@ -567,4 +569,79 @@ export async function createUserAction(formData: FormData) {
 }
 ```
 
-This architecture provides a solid foundation for scalable Next.js applications with clear separation of concerns, type safety, and maintainable code organization.
+## Page vs Display Component Pattern
+
+### Recommended Architecture for Pages
+
+**Page Component (Server)**: Authentication, data fetching, business logic
+**Display Component (Client)**: UI rendering, state management, interactivity
+
+```typescript
+// ✅ CORRECT: app/dashboard/page.tsx (Server Component)
+import { createClient } from '@/lib/supabase/server';
+import { redirect } from 'next/navigation';
+import { DashboardDisplay } from '@/components/dashboard/DashboardDisplay';
+
+export default async function DashboardPage() {
+  // Server-side auth check
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user) {
+    redirect('/login');
+  }
+
+  // Server-side data fetching
+  const dashboardData = await fetchDashboardData(user.id);
+
+  // Pass to Client Component for interactivity
+  return <DashboardDisplay user={user} data={dashboardData} />;
+}
+
+// ✅ CORRECT: components/dashboard/DashboardDisplay.tsx (Client Component)
+'use client';
+
+import { useState } from 'react';
+
+export function DashboardDisplay({ user, data }) {
+  const [activeTab, setActiveTab] = useState('overview');
+  // All interactivity and state here
+  
+  return (
+    <div>
+      {/* Interactive UI */}
+    </div>
+  );
+}
+```
+
+### Anti-Patterns to Avoid
+
+```typescript
+// ❌ WRONG: Never put 'use client' on page routes
+'use client';
+
+export default function DashboardPage() {
+  // This loses Server Component benefits:
+  // - No server-side authentication
+  // - No SEO optimization
+  // - Larger bundle size
+  // - Can't use async/await directly
+}
+```
+
+### Benefits of This Pattern
+
+**Server Component Pages:**
+- Server-side authentication and redirects
+- SEO optimization and faster initial loads
+- Secure data fetching
+- Smaller client bundles
+
+**Client Component Displays:**
+- Interactive state management
+- Event handlers and user interactions
+- Browser-only APIs
+- Real-time updates
+
+This architecture provides a solid foundation for scalable Next.js applications with clear separation of concerns, optimal performance, and maintainable code organization.

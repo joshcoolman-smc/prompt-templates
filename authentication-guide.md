@@ -997,19 +997,46 @@ export default async function HomePage() {
 ### Dashboard Page
 
 ```typescript
-// src/app/dashboard/page.tsx
+// src/app/dashboard/page.tsx (Server Component - NO 'use client')
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
-import { LogoutButton } from '@/components/auth/LogoutButton';
+import { DashboardDisplay } from '@/components/dashboard/DashboardDisplay';
 
 export default async function DashboardPage() {
   const supabase = createClient();
   
+  // Server-side authentication check
   const { data: { user } } = await supabase.auth.getUser();
   
   if (!user) {
     redirect('/');
   }
+
+  // Server-side data fetching (if needed)
+  // const dashboardData = await fetchDashboardData(user.id);
+
+  // Pass data to Client Component for interactivity
+  return <DashboardDisplay user={user} />;
+}
+```
+
+```typescript
+// src/components/dashboard/DashboardDisplay.tsx (Client Component)
+'use client';
+
+import { useState } from 'react';
+import { LogoutButton } from '@/components/auth/LogoutButton';
+
+interface DashboardDisplayProps {
+  user: {
+    id: string;
+    email: string;
+    user_metadata?: { name?: string };
+  };
+}
+
+export function DashboardDisplay({ user }: DashboardDisplayProps) {
+  const [activeView, setActiveView] = useState('overview');
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -1031,6 +1058,26 @@ export default async function DashboardPage() {
             <p className="text-gray-600">
               You are successfully authenticated and can access this protected dashboard.
             </p>
+            
+            {/* Client-side interactivity */}
+            <div className="mt-4">
+              <button
+                onClick={() => setActiveView('overview')}
+                className={`mr-2 px-3 py-1 rounded ${
+                  activeView === 'overview' ? 'bg-blue-500 text-white' : 'bg-gray-200'
+                }`}
+              >
+                Overview
+              </button>
+              <button
+                onClick={() => setActiveView('settings')}
+                className={`px-3 py-1 rounded ${
+                  activeView === 'settings' ? 'bg-blue-500 text-white' : 'bg-gray-200'
+                }`}
+              >
+                Settings
+              </button>
+            </div>
           </div>
         </div>
       </main>

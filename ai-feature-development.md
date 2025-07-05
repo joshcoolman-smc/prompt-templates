@@ -434,17 +434,44 @@ export function ProfileForm({ profile, onSave }: ProfileFormProps) {
 
 ```typescript
 // src/app/profile/page.tsx
-import { ProfileContainer } from '@/features/profile/components/ProfileContainer';
+import { createClient } from '@/lib/supabase/server';
+import { redirect } from 'next/navigation';
+import { ProfileDisplay } from '@/features/profile/components/ProfileDisplay';
 
-export default function ProfilePage() {
+export default async function ProfilePage() {
+  // Server-side authentication check
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user) {
+    redirect('/login');
+  }
+
+  // Server-side data fetching
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
+    .single();
+
+  if (!profile) {
+    redirect('/onboarding');
+  }
+
+  // Pass to Client Component for interactivity
   return (
     <div className="max-w-2xl mx-auto py-8">
       <h1 className="text-3xl font-bold mb-8">Profile Settings</h1>
-      <ProfileContainer />
+      <ProfileDisplay profile={profile} />
     </div>
   );
 }
 ```
+
+**Note**: This page follows the Server/Client Component pattern:
+- **Server Component Page**: Handles authentication, data fetching, and server-side concerns
+- **Client Component Display**: Manages UI interactions and state (ProfileDisplay)
+- **Never use `'use client'` on page routes** - pages must remain Server Components
 
 #### 3.6 Run Tests After Each Implementation
 
