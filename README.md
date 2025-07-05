@@ -1,29 +1,192 @@
-# AI Prompting
+# Next.js Development Guidelines
 
-### Knowledge Multiplier
+## Overview
 
-Use AI to multiply and extend your existing knowledge base rather than replace fundamental understanding. Build core competency first, then leverage AI to accelerate beyond your current level instead of using it as a substitute for learning the basics.
+This repository contains comprehensive development guidelines for building Next.js applications with TypeScript, Tailwind CSS v4, and Supabase. These guidelines are designed to work seamlessly with AI-assisted development using Test-Driven Development and production-build validation workflows.
 
-### Domain Fluency
+## 🤖 AI Development Approach
 
-Learn the foundational vocabulary and core concepts of a field before prompting AI for expert-level outputs in that domain. Master the language of photography, typography, or any specialty area first, so you can communicate with precision and unlock the model’s deeper knowledge within that domain’s context.
+### Core Philosophy
+- **Test-Driven Development First** - Always write tests before implementation
+- **Production Build as Completion Gate** - Features aren't done until `npm run build` succeeds
+- **Repository-Service-Hooks Architecture** - Consistent architectural patterns
+- **GitHub Issues Integration** - CLI-driven project management
+- **Vercel Preview Deployments** - Every branch gets automatic deployment
 
-### Let’s Play a Game
+## 📚 Guidelines Structure
 
-Frame your AI interactions as defined games or exercises with clear rules and objectives to unlock more creative and focused collaboration. By explicitly stating “we’re playing a game where…” you establish context, constraints, and expectations that guide both parties toward more innovative and structured outcomes.
+### **Architecture & Patterns**
+- [`nextjs-architecture.md`](nextjs-architecture.md) - Project structure, feature modules, and architectural patterns
+- [`component-development.md`](component-development.md) - React component patterns, UI development, and Tailwind integration
+- [`authentication-guide.md`](authentication-guide.md) - Complete Supabase authentication implementation
 
-### Interview Prompting
+### **Development Workflow**
+- [`ai-feature-development.md`](ai-feature-development.md) - **🎯 START HERE** - Complete step-by-step AI workflow
+- [`testing-strategy.md`](testing-strategy.md) - TDD-first testing approaches and comprehensive test patterns
+- [`development-workflow.md`](development-workflow.md) - Git workflow, code review, and quality standards
 
-Turn AI into an active partner by having it ask clarifying questions and challenge your assumptions before proceeding. Instead of accepting vague requests, prompt the model to interview you about your goals, constraints, and unstated requirements to uncover what you didn’t know you needed to specify.
+### **Operations & Deployment**
+- [`vercel-deployment.md`](vercel-deployment.md) - CI/CD, preview deployments, and production workflows
+- [`github-issues-guide.md`](github-issues-guide.md) - CLI-based issue management and project tracking
 
-### Meta Prompt
+## 🚀 Quick Start for AI
 
-Start with verbose, vague descriptions when you’re grasping for what you want - it’s okay to be messy initially. Follow your rough concept with “help me improve this to an effective prompt” to transform unclear ideas into precise, actionable prompts that get better results.
+When starting any new feature, follow this sequence:
 
-### Prompt Planning
+### 1. **Read the AI Workflow**
+Start with [`ai-feature-development.md`](ai-feature-development.md) for the complete step-by-step process.
 
-After refining your initial concept, build up sufficient detail and context before executing. Ask for a PRD (Product Requirements Document) for your specific application - whether it’s a NextJS app, Python game, or other project - to establish clear requirements and constraints before generating code or content.
+### 2. **Create GitHub Issue**
+```bash
+gh issue create --title "[FEATURE] Feature description" --label "feature"
+```
 
-### Read Before You Run
+### 3. **Follow TDD Cycle**
+```bash
+# 1. Create feature branch
+git checkout -b "feature/descriptive-name"
 
-Always review AI-generated prompts before executing them to catch misinterpretations and ensure they match your intent. Don’t be tempted to run what seems sufficient without reading - you may miss important details or find the AI misunderstood your requirements, requiring refinement before the first execution.
+# 2. Set up feature structure
+mkdir -p src/features/[feature-name]/{components,hooks,repository,service,types}
+mkdir -p __tests__/features/[feature-name]
+
+# 3. Write tests FIRST (they should fail)
+npm test -- --testPathPattern=[feature-name]
+
+# 4. Implement to make tests pass
+# 5. Validate continuously
+npm run lint:fix && npm run type-check && npm test
+```
+
+### 4. **Mandatory Completion Validation**
+```bash
+# CRITICAL: All must pass before PR
+npm run lint:fix     # Fix linting issues
+npm run type-check   # No TypeScript errors
+npm test            # All tests pass
+npm run build       # Production build succeeds
+```
+
+### 5. **Create PR with Preview**
+```bash
+gh pr create --title "feat(scope): description"
+# Vercel automatically creates preview deployment
+```
+
+## 🏗️ Architecture Overview
+
+### Feature Module Pattern
+Every feature follows the Repository-Service-Hooks structure:
+
+```
+src/features/[feature-name]/
+├── components/     # UI components
+├── hooks/          # React state management
+├── repository/     # Data access layer
+├── service/        # Business logic
+├── types/          # TypeScript definitions
+└── utils/          # Helper functions
+```
+
+### Technology Stack
+- **Framework**: Next.js 13+ (App Router)
+- **Language**: TypeScript (strict mode)
+- **Styling**: Tailwind CSS v4
+- **Authentication**: Supabase Auth
+- **Database**: Supabase PostgreSQL
+- **Testing**: Jest + Testing Library + Playwright
+- **Deployment**: Vercel with preview deployments
+
+## ⚡ Critical Rules for AI
+
+### 🚨 Non-Negotiable Requirements
+
+1. **Write Tests First** - Every feature starts with failing tests
+2. **Production Build Gate** - If `npm run build` fails, the feature is not complete
+3. **Follow Architecture** - Use Repository-Service-Hooks pattern consistently
+4. **Document Changes** - Update relevant README files and documentation
+5. **Validate Continuously** - Run linting and type checking throughout development
+
+### 🎯 Success Criteria
+
+A feature is only complete when:
+- [ ] Tests written first using TDD approach
+- [ ] All tests pass (`npm test`)
+- [ ] No linting errors (`npm run lint`)
+- [ ] No TypeScript errors (`npm run type-check`)
+- [ ] **Production build succeeds** (`npm run build`)
+- [ ] Preview deployment works correctly
+- [ ] Documentation updated
+
+## 🔍 Common Commands
+
+### Development
+```bash
+npm run dev          # Start development server
+npm run build        # Build for production (CRITICAL validation)
+npm run lint:fix     # Fix linting issues
+npm run type-check   # Verify TypeScript
+npm test            # Run test suite
+```
+
+### GitHub Integration
+```bash
+gh issue create     # Create new issue
+gh issue list       # List open issues
+gh pr create        # Create pull request
+gh issue develop 42 # Create branch from issue
+```
+
+### Testing
+```bash
+npm test -- --watch                    # Watch mode for active development
+npm test -- --testPathPattern=feature  # Run specific feature tests
+npm test -- --coverage                 # Generate coverage report
+```
+
+## 📖 Detailed Workflows
+
+### For New Features
+1. Read [`ai-feature-development.md`](ai-feature-development.md) for complete workflow
+2. Reference [`nextjs-architecture.md`](nextjs-architecture.md) for structure patterns
+3. Use [`component-development.md`](component-development.md) for UI implementation
+4. Follow [`testing-strategy.md`](testing-strategy.md) for TDD approach
+
+### For Authentication
+- Use [`authentication-guide.md`](authentication-guide.md) for complete Supabase integration
+
+### For Deployment Issues
+- Reference [`vercel-deployment.md`](vercel-deployment.md) for troubleshooting
+
+### For Project Management
+- Use [`github-issues-guide.md`](github-issues-guide.md) for CLI-based issue management
+
+## 🎓 Reference Materials
+
+Additional resources are available in the [`_reference/`](_reference/) directory:
+- [`prompting-guidelines.md`](_reference/prompting-guidelines.md) - AI prompting best practices
+- [`code-review.md`](_reference/code-review.md) - Code review checklist template
+- Technology-specific reference guides
+
+## 💡 Key Principles
+
+### Test-Driven Development
+- Write failing tests first to define success criteria
+- Implement minimal code to make tests pass
+- Refactor while keeping tests green
+- Use tests as living documentation
+
+### Production-First Mindset
+- Local production builds must succeed before any PR
+- If it doesn't build locally, it won't build on Vercel
+- Address build issues immediately, not later
+- Preview deployments validate real-world functionality
+
+### Consistent Architecture
+- Every feature follows the same structural patterns
+- Repository layer handles data access
+- Service layer contains business logic
+- Hook layer manages React state
+- Component layer focuses on UI presentation
+
+This approach ensures reliable, maintainable, and scalable Next.js applications with comprehensive AI collaboration support.
