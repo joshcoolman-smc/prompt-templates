@@ -16,25 +16,25 @@ This repository contains comprehensive development guidelines for building Next.
 ## 📚 Guidelines Structure
 
 ### **Architecture & Patterns**
-- [`nextjs-architecture.md`](nextjs-architecture.md) - Project structure, feature modules, and architectural patterns
-- [`component-development.md`](component-development.md) - React component patterns, UI development, and Tailwind integration
-- [`authentication-guide.md`](authentication-guide.md) - Complete Supabase authentication implementation
+- [`nextjs-architecture.md`](ai-instructions/architecture/nextjs-architecture.md) - Project structure, feature modules, and architectural patterns
+- [`component-development.md`](ai-instructions/architecture/component-development.md) - React component patterns, UI development, and Tailwind integration
+- [`authentication-guide.md`](ai-instructions/architecture/authentication-guide.md) - Complete Supabase authentication implementation
 
 ### **Development Workflow**
-- [`ai-feature-development.md`](ai-feature-development.md) - **🎯 START HERE** - Complete step-by-step AI workflow
-- [`testing-strategy.md`](testing-strategy.md) - TDD-first testing approaches and comprehensive test patterns
-- [`development-workflow.md`](development-workflow.md) - Git workflow, code review, and quality standards
+- [`ai-feature-development.md`](ai-instructions/core-workflow/ai-feature-development.md) - **🎯 START HERE** - Complete step-by-step AI workflow
+- [`testing-strategy.md`](ai-instructions/core-workflow/testing-strategy.md) - TDD-first testing approaches and comprehensive test patterns
+- [`development-workflow.md`](ai-instructions/core-workflow/development-workflow.md) - Git workflow, code review, and quality standards
 
 ### **Operations & Deployment**
-- [`vercel-deployment.md`](vercel-deployment.md) - CI/CD, preview deployments, and production workflows
-- [`github-issues-guide.md`](github-issues-guide.md) - CLI-based issue management and project tracking
+- [`vercel-deployment.md`](ai-instructions/operations/vercel-deployment.md) - CI/CD, preview deployments, and production workflows
+- [`github-issues-guide.md`](ai-instructions/operations/github-issues-guide.md) - CLI-based issue management and project tracking
 
 ## 🚀 Quick Start for AI
 
 When starting any new feature, follow this sequence:
 
 ### 1. **Read the AI Workflow**
-Start with [`ai-feature-development.md`](ai-feature-development.md) for the complete step-by-step process.
+Start with [`ai-feature-development.md`](ai-instructions/core-workflow/ai-feature-development.md) for the complete step-by-step process.
 
 ### 2. **Create GitHub Issue**
 ```bash
@@ -147,27 +147,38 @@ npm test -- --coverage                 # Generate coverage report
 ## 📖 Detailed Workflows
 
 ### For New Features
-1. Read [`ai-feature-development.md`](ai-feature-development.md) for complete workflow
-2. Reference [`nextjs-architecture.md`](nextjs-architecture.md) for structure patterns
-3. Use [`component-development.md`](component-development.md) for UI implementation
-4. Follow [`testing-strategy.md`](testing-strategy.md) for TDD approach
+1. Read [`ai-feature-development.md`](ai-instructions/core-workflow/ai-feature-development.md) for complete workflow
+2. Reference [`nextjs-architecture.md`](ai-instructions/architecture/nextjs-architecture.md) for structure patterns
+3. Use [`component-development.md`](ai-instructions/architecture/component-development.md) for UI implementation
+4. Follow [`testing-strategy.md`](ai-instructions/core-workflow/testing-strategy.md) for TDD approach
 
 ### For Authentication
-- Use [`authentication-guide.md`](authentication-guide.md) for complete Supabase integration
+- Use [`authentication-guide.md`](ai-instructions/architecture/authentication-guide.md) for complete Supabase integration
 
 ### For Deployment Issues
-- Reference [`vercel-deployment.md`](vercel-deployment.md) for troubleshooting
+- Reference [`vercel-deployment.md`](ai-instructions/operations/vercel-deployment.md) for troubleshooting
 
 ### For Project Management
-- Use [`github-issues-guide.md`](github-issues-guide.md) for CLI-based issue management
+- Use [`github-issues-guide.md`](ai-instructions/operations/github-issues-guide.md) for CLI-based issue management
 
 ## 🎓 Reference Materials
 
-Additional resources are available in the [`_reference/`](_reference/) directory:
-- [`prompting-guidelines.md`](_reference/prompting-guidelines.md) - AI prompting best practices
-- [`code-review.md`](_reference/code-review.md) - Code review checklist template
-- [`mfa-patterns.md`](_reference/mfa-patterns.md) - Multi-factor authentication implementation patterns
-- Technology-specific reference guides
+Additional resources are available in the [`ai-instructions/reference/`](ai-instructions/reference/) directory:
+- [`modernist-design.md`](ai-instructions/reference/modernist-design.md) - Swiss modernist-inspired design system guidelines
+- [`typography.md`](ai-instructions/reference/typography.md) - Typography showcase and 4pt grid system
+- Technology-specific reference guides and patterns
+
+## 🎯 Feature Examples
+
+The [`feature-examples/`](feature-examples/) directory contains complete feature specifications that demonstrate the development workflow:
+- [`apple-reminders.md`](feature-examples/apple-reminders.md) - Comprehensive reminders app with Supabase
+- [`ideas-app.md`](feature-examples/ideas-app.md) - AI-powered idea capture and organization system
+- [`inventory-management.md`](feature-examples/inventory-management.md) - E-commerce inventory dashboard
+- [`kanban.md`](feature-examples/kanban.md) - Project management board for small teams
+- [`homepage.md`](feature-examples/homepage.md) - Premium homepage design project
+- [`slide-presentation.md`](feature-examples/slide-presentation.md) - Markdown-to-presentation converter
+
+These examples follow the Repository-Service-Hooks architecture and Next.js development patterns outlined in this guide.
 
 ## 💡 Key Principles
 

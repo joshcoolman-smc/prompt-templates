@@ -23,26 +23,28 @@ The flagship approach uses human-in-the-loop development:
 
 ## Primary Workflows
 
-### Website Building Blocks (`/website-building-blocks/`)
-Use this for complete website projects following the phased approach:
-- **Phase 1**: Foundation (Vite React setup, project structure)
-- **Phase 2**: Design System (colors, typography, spacing)
-- **Phase 3**: Core Components (UI elements, forms, navigation)
-- **Phase 4**: Page Templates (complete pages and layouts)
+### AI Instructions (`/ai-instructions/`)
+The core AI development guidance is organized into logical sections:
 
-Always follow the interactive workflow defined in `interactive-workflow.md` and use the controller pattern from `interactive-controller.md`.
+#### Core Workflow (`/ai-instructions/core-workflow/`)
+- `ai-feature-development.md`: **START HERE** - Complete step-by-step AI workflow
+- `testing-strategy.md`: TDD-first testing approaches and comprehensive test patterns
+- `development-workflow.md`: Git workflow, code review, and quality standards
 
-### Next.js Projects (`/next-js/`)
-For Next.js 13+ applications, reference:
-- `nextjs-feature-module.md` for feature organization
-- `nextjs-supabase-auth.md` for authentication setups
-- Framework-specific patterns using App Router and Server Actions
+#### Architecture (`/ai-instructions/architecture/`)
+- `nextjs-architecture.md`: Project structure, feature modules, and architectural patterns
+- `component-development.md`: React component patterns, UI development, and Tailwind integration
+- `authentication-guide.md`: Complete Supabase authentication implementation
 
-### Development Guidelines (`/dev-guidelines/`)
-Core coding standards and architecture patterns:
-- `feature-guidelines-react-ts.md`: Complete feature module structure
-- `react-component-guide.md`: Component development patterns
-- `next-typescript-guidelines.md`: Next.js specific guidelines
+#### Operations (`/ai-instructions/operations/`)
+- `vercel-deployment.md`: CI/CD, preview deployments, and production workflows
+- `github-issues-guide.md`: CLI-based issue management and project tracking
+
+#### Reference (`/ai-instructions/reference/`)
+- Additional resources and reference materials for specific use cases
+
+### Feature Examples (`/_feature-examples/`)
+Complete feature implementations and design patterns for various use cases
 
 ## Technology Stack Standards
 
@@ -74,6 +76,7 @@ When using the interactive building approach, always:
 - Wait for approval before implementing each phase
 - Confirm design decisions and technical choices
 - Get feedback on component implementations
+- Reference the appropriate files in `/ai-instructions/` for guidance
 
 ### Feature Organization
 Structure new features using the Repository-Service-Hooks pattern:
