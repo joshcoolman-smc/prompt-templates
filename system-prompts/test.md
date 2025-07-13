@@ -1,4 +1,3 @@
-https://claude.ai/public/artifacts/34f6ad8e-8986-4340-9a76-cde276996936
 
 # Stop Googling and Start Managing AI
 
