@@ -1,56 +1,217 @@
+# Supabase Setup Guide
 
-# Stop Googling and Start Managing AI
+This guide covers setting up a Next.js TypeScript + Tailwind project with Supabase using the MCP server for AI-driven database development.
 
-We need to rethink how we do everything in the age of AI. We’re too used to doing everything ourselves, hunting down links, piecing together information manually. Instead, think of yourself as a researcher with assistance. Have AI agents do the work and come back to you with results.
+## Prerequisites
 
-## The Manager Mindset
+- Next.js project with TypeScript and Tailwind CSS
+- Node.js installed
+- Supabase account
 
-Lean into AI for everything—investigation, research, reading and analyzing web pages. This is where everything is heading anyway.
+## 1. MCP Server Configuration
 
-View yourself as someone with a team of assistants, not someone who has to do it all. You manage the work instead of doing the work. This requires a different approach to tasks and information gathering.
+Create `.mcp.json` in your project root:
 
-## Context Engineering
+```json
+{
+  "mcpServers": {
+    "supabase": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@supabase/mcp-server-supabase@latest"
+      ],
+      "env": {
+        "SUPABASE_ACCESS_TOKEN": "your-access-token-here"
+      }
+    }
+  }
+}
+```
 
-This is Context Engineering—building up comprehensive context around your ideas by gathering information with AI. It’s not just having AI do things for you. It’s about engaging with AI to create something better.
+### Getting Your Access Token
 
-You curate and distill information, then present it back to AI for maximum effectiveness. Create a comprehensive information package that would allow anyone with a clean slate to execute your vision.
+1. Go to [Supabase Dashboard](https://supabase.com/dashboard)
+2. Settings → Access Tokens
+3. Generate new token with organization-level permissions
+4. Name it "Claude Code MCP" or similar
+5. Copy the token and replace `your-access-token-here` in `.mcp.json`
 
-## The Four Pillars
+## 2. Install Supabase Client
 
-**1. Clear Objectives**
-Sharp thinking about what you’re after. Vague requests yield vague results. Clear objectives make AI assistance powerful.
+```bash
+npm install @supabase/supabase-js
+```
 
-**2. Active Engagement**
-Read and understand what AI gives you. This is an active conversation. Engage, question, and refine.
+## 3. Environment Variables
 
-**3. Higher-Level Synthesis**
-Distill information. Map out plans. Clarify concepts. Answer follow-up questions. Operate at the strategic level while AI handles tactical research.
+Create `.env.local`:
 
-**4. Context Reframing**
-Constantly reorient what you’re gathering. Ask: “How would I want this information presented if I were starting fresh? What context would I need to complete this task?”
+```env
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+```
 
-## Plan Your Work and Work Your Plan
+*Note: These will be populated after creating your Supabase project via AI*
 
-When you stop doing manual information gathering and start managing AI responses with discernment, you can operate at a higher level. Your capabilities expand because you’re not bottlenecked by research tasks.
+## 4. Supabase Client Setup
 
-Your plan-building abilities level up. You think like an architect, not a construction worker. Design the blueprint while AI assistants gather materials and help with construction.
+Create `lib/supabase.ts`:
 
-## AI as Collaborator, Not Gopher
+```typescript
+import { createClient } from '@supabase/supabase-js'
 
-AI is not a task master or a gopher. It’s a collaborator. Think of it like this: you’re on a basketball court practicing your dribble and LeBron James shows up. You don’t tell him what to do. You ask him how you can improve. You ask what you’re doing wrong.
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
-That’s the mindshift you need. With Google it was “go get me this,” “do this for me,” “where can I find this?” Then you did the work. Now you have intelligence waiting to assist you.
+export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+```
 
-If you just tell AI to do stupid things, it will do them. It probably won’t give you better results than if you had done it yourself. It might even do worse.
+## 5. TypeScript Types Setup
 
-But if you engage in conversation saying “hey, this is what I’m thinking. What am I missing? How can I improve this? Do you think there’s a better approach?” you get valuable information back. This helps you better articulate what you’re after.
+Create `types/database.ts`:
 
-Start with vague information gathering, then narrow your focus. Ask clarifying questions. Build up context for yourself, then turn it back so AI has enough context to execute effectively on your requests.
+```typescript
+// This file will be generated by AI using the MCP server
+// After creating tables, AI will run generate_typescript_types
+export interface Database {
+  // Generated types will go here
+}
 
-You can’t just come out of the gate saying “do x, y, z for me.” You need to build up context first.
+// Helper types for easier use
+export type User = Database['public']['Tables']['users']['Row']
+export type NewUser = Database['public']['Tables']['users']['Insert']
+// Add more helper types as needed
+```
 
-## Getting Started
+## 6. Development User System
 
-Begin small. Next time you face a research task, resist the urge to open Google. Frame your objective clearly and have a conversation with AI about it. Let it do the searching, reading, and initial synthesis. Your job is to guide, refine, and orchestrate that information into something actionable.
+For frictionless prototyping, create `lib/dev-auth.ts`:
 
-You’re not just collecting information—you’re engineering context. In a world where information is abundant but understanding is scarce, context engineering is the most valuable skill you can develop.
+```typescript
+// Development-only user switching
+export const DEV_USERS = [
+  { id: 'user-1', email: 'alice@test.com', name: 'Alice Admin', role: 'admin' },
+  { id: 'user-2', email: 'bob@test.com', name: 'Bob User', role: 'user' },
+  { id: 'user-3', email: 'carol@test.com', name: 'Carol Manager', role: 'manager' }
+] as const
+
+export const getCurrentUserId = () => {
+  // In dev, return from localStorage or state
+  return localStorage.getItem('dev-user-id') || 'user-1'
+}
+
+export const setCurrentUserId = (userId: string) => {
+  localStorage.setItem('dev-user-id', userId)
+}
+```
+
+## 7. Project Structure
+
+```
+├── .mcp.json                 # MCP server configuration
+├── .env.local               # Environment variables
+├── lib/
+│   ├── supabase.ts         # Supabase client
+│   └── dev-auth.ts         # Development user system
+├── types/
+│   └── database.ts         # Generated database types
+└── components/
+    └── DevUserSwitcher.tsx # Development user switcher
+```
+
+## 8. AI Workflow Commands
+
+Once setup is complete, you can use these AI commands:
+
+### Create New Project
+```
+"Create a new Supabase project called 'my-app-prototype'"
+```
+
+### Create Tables
+```
+"Create a users table with id, email, name, role, and created_at"
+"Create a posts table that references users with title, content, and timestamps"
+```
+
+### Generate Types
+```
+"Generate TypeScript types for this project and update the database.ts file"
+```
+
+### Seed Development Data
+```
+"Seed the database with the dev users and some sample posts"
+```
+
+## 9. Development User Switcher Component
+
+Create `components/DevUserSwitcher.tsx`:
+
+```typescript
+'use client'
+
+import { useState, useEffect } from 'react'
+import { DEV_USERS, getCurrentUserId, setCurrentUserId } from '@/lib/dev-auth'
+
+export default function DevUserSwitcher() {
+  const [currentUserId, setCurrentUserIdState] = useState<string>('')
+
+  useEffect(() => {
+    setCurrentUserIdState(getCurrentUserId())
+  }, [])
+
+  const handleUserChange = (userId: string) => {
+    setCurrentUserId(userId)
+    setCurrentUserIdState(userId)
+    window.location.reload() // Refresh to apply new user context
+  }
+
+  if (process.env.NODE_ENV === 'production') return null
+
+  return (
+    <div className="fixed top-4 right-4 bg-yellow-100 p-2 rounded border">
+      <label className="text-sm font-medium">Dev User:</label>
+      <select 
+        value={currentUserId} 
+        onChange={(e) => handleUserChange(e.target.value)}
+        className="ml-2 text-sm border rounded px-2 py-1"
+      >
+        {DEV_USERS.map(user => (
+          <option key={user.id} value={user.id}>
+            {user.name} ({user.role})
+          </option>
+        ))}
+      </select>
+    </div>
+  )
+}
+```
+
+## 10. Getting Started
+
+1. Complete the setup above
+2. Add your Supabase access token to `.mcp.json`
+3. Restart Claude Code to load the MCP server
+4. Start building with AI:
+   - "Let's create a new Supabase project for this app"
+   - "Create tables for users, posts, and comments"
+   - "Generate TypeScript types"
+   - "Create a user dashboard component"
+
+## Benefits of This Setup
+
+- **Zero abstraction**: Direct SQL with TypeScript types
+- **AI-native**: LLM can create/modify database schema naturally
+- **Frictionless prototyping**: No login required during development
+- **Type safety**: Generated types from actual database schema
+- **Realistic testing**: Multi-user scenarios without auth complexity
+- **Production ready**: Easy transition to real auth when ready
+
+## Security Notes
+
+- The MCP server has full database permissions for development
+- Use only with development/staging environments
+- Never expose access tokens in client-side code
+- Review all AI-generated SQL before applying to production
